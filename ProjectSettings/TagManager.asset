@@ -13,11 +13,11 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - PlayerDetector
+  - EnemyDetector
+  - Player
+  - Enemy
+  - Environment
   - 
   - 
   - 
