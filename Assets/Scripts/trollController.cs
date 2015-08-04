@@ -1,17 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class trollController : MonoBehaviour {
 
 	private Animator myAnimator;
 	private bool isAttacking;
 	private Rigidbody myRigidbody;
+	private float currentLife;
 
 	public int speed;
 	public GameObject player;
+	public Slider hpBar;
+	public float totalLife=100f;
 
 	void Start()
 	{
+		currentLife = totalLife;
 		myAnimator = this.GetComponent<Animator> ();
 		myRigidbody = this.GetComponent<Rigidbody> ();
 	}
@@ -36,6 +41,8 @@ public class trollController : MonoBehaviour {
 	void ColliderHit(Collider other)
 	{
 		if (isAttacking) {
+
+			other.SendMessage("ReceiveDamage",30);
 			Debug.Log ("Player Hit");
 		}
 	}
@@ -56,5 +63,16 @@ public class trollController : MonoBehaviour {
 		Destroy (this.gameObject);
 
 	}
+
+	void ReceiveDamage(int damage)
+	{
+		currentLife -= damage;
+		hpBar.value = currentLife / totalLife;
+		if (currentLife <=0) {
+			myAnimator.SetTrigger("Die");
+		
+		}
+	}
+
 }
 

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class PlayerControllerIso : MonoBehaviour {
 
@@ -10,11 +11,15 @@ public class PlayerControllerIso : MonoBehaviour {
 
 	private bool attack;
 	private bool isAttacking;
+	private float currentLife;
 
 	public int speed;
+	public Slider hpBar;
+	public float totalLife=100f;
+
 	// Use this for initialization
 	void Start () {
-	
+		currentLife = totalLife;
 		myAnimator = this.GetComponent<Animator> ();
 		myRigidbody = this.GetComponent<Rigidbody> ();
 	}
@@ -66,8 +71,23 @@ public class PlayerControllerIso : MonoBehaviour {
 	void ColliderHit(Collider other)
 	{
 		if (isAttacking) {
+			other.SendMessageUpwards("ReceiveDamage",5);
 			Debug.Log("I Hit You");		
 		}
+	}
+
+	void ReceiveDamage(int damage)
+	{
+		currentLife -= damage;
+		hpBar.value = currentLife / totalLife;
+		if (currentLife <= 0) {
+			
+		}
+	}
+
+	void Dead()
+	{
+
 	}
 
 
