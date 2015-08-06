@@ -20,7 +20,7 @@ public class LevelController : MonoBehaviour {
 		}
 		else if (Input.GetKeyDown (KeyCode.Escape)) {
 			
-			Application.Quit;
+			Application.Quit();
 		}
 	
 	}
