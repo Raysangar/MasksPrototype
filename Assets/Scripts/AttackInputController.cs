@@ -15,5 +15,8 @@ public class AttackInputController : MonoBehaviour {
 	    
 	    if (Input.GetKeyDown(KeyCode.Alpha2))
             SendMessage("Attack", AttackType.Square);
+
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+            SendMessage("Attack", AttackType.Triangle);
     }
 }

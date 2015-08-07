@@ -7,7 +7,8 @@ using System.IO;
 public class ComboEditorWindow : EditorWindow
 {
     private ComboInfo comboInfo = new ComboInfo();
-
+    private Animator animator;
+    private List<string> animationTriggers = new List<string>();
     private List<bool> toggle = new List<bool>();
     private Vector2 scrollPosition = new Vector2(0, 0);
 
@@ -30,29 +31,42 @@ public class ComboEditorWindow : EditorWindow
     {
         scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
         {
+            animator = EditorGUILayout.ObjectField(animator, typeof(Animator), true) as Animator;
+            if (animator != null)
+            {
+                foreach (AnimatorControllerParameter parameter in animator.parameters)
+                    if (parameter.type == AnimatorControllerParameterType.Trigger)
+                        animationTriggers.Add(parameter.name);
+            }
+            else animationTriggers.Clear();
+            EditorGUILayout.Separator();
             int editorPosition = 0;
             List<string> keys = new List<string>(comboInfo.Combos.Keys);
             foreach (string comboName in keys)
             {
                 EditorGUILayout.BeginHorizontal();
-                    addComboForm(comboName, editorPosition++);
+                addComboForm(comboName, editorPosition++);
                 EditorGUILayout.EndHorizontal();
             }
             if (GUILayout.Button("Add Combo"))
                 addNewCombo();
-
-            if (GUILayout.Button("Save Combos Sheet"))
-                saveCombosSheet();
+            EditorGUILayout.BeginHorizontal();
+            {
+                if (GUILayout.Button("Open Combos Sheet"))
+                    openCombosSheet();
+                if (GUILayout.Button("Save Combos Sheet"))
+                    saveCombosSheet();
+            }
+            EditorGUILayout.EndHorizontal();
+            
         }
         EditorGUILayout.EndScrollView();
     }
 
     private void addComboForm(string comboName, int editorPosition)
     {
-
         Combo combo = comboInfo.Combos[comboName];
         string newComboName = EditorGUILayout.TextField(comboName);
-
         if (comboName != newComboName)
         {
             comboInfo.Combos.Remove(comboName);
@@ -72,7 +86,15 @@ public class ComboEditorWindow : EditorWindow
             EditorGUILayout.BeginVertical();
             {
                 for (int i = 0; i < combo.ComboSequence.Count; ++i)
-                     combo.ComboSequence[i] = (AttackType) EditorGUILayout.EnumPopup(combo.ComboSequence[i]);
+                {
+                    EditorGUILayout.BeginHorizontal();
+                    {
+                        combo.ComboSequence[i] = (AttackType)EditorGUILayout.EnumPopup(combo.ComboSequence[i]);
+                        if (GUILayout.Button("Remove"))
+                            combo.ComboSequence.RemoveAt(i);
+                    }
+                    EditorGUILayout.EndHorizontal();
+                }
                 if (GUILayout.Button("Add"))
                     combo.Add(AttackType.Square);
             }
@@ -83,7 +105,17 @@ public class ComboEditorWindow : EditorWindow
         float maxTime = EditorGUILayout.FloatField("Minimun Time Untill Correct Combo", comboInfo.CombosTimeRequirement[newComboName].Value);
         comboInfo.CombosTimeRequirement[newComboName] = new KeyValuePair<float, float>(minTime, maxTime);
 
-        comboInfo.CombosAnimation[newComboName] = EditorGUILayout.TextField("Animation To Execute", comboInfo.CombosAnimation[newComboName]);
+        if (animationTriggers.Count == 0)
+            comboInfo.CombosAnimation[newComboName] = EditorGUILayout.TextField("Animation To Execute", comboInfo.CombosAnimation[newComboName]);
+        else
+        {
+            int animationTriggerIndex = 
+                EditorGUILayout.Popup(animationTriggers.FindIndex(p => p == comboInfo.CombosAnimation[newComboName]), animationTriggers.ToArray());
+            comboInfo.CombosAnimation[newComboName] = animationTriggers[(animationTriggerIndex == -1) ? 0 : animationTriggerIndex];
+        }
+
+        if (GUILayout.Button("Remove"))
+            comboInfo.removeCombo(comboName);
     }
 
     private void addNewCombo()
@@ -95,6 +127,17 @@ public class ComboEditorWindow : EditorWindow
         comboInfo.CombosAnimation[comboName] = "";
         comboInfo.CombosTimeRequirement[comboName] = new KeyValuePair<float, float>(0, 0);
         toggle.Add(false);
+    }
+
+    private void openCombosSheet()
+    {
+        string path = EditorUtility.OpenFilePanel("Open Combos Sheet", "../../Resources/Combos Sheets", "txt");
+        if (path == "") return;
+        StreamReader reader = File.OpenText(path);
+        comboInfo = new ComboInfo(reader.ReadToEnd());
+        toggle.Clear();
+        for (int i = 0; i < comboInfo.CombosCount; ++i)
+            toggle.Add(false);
     }
 
     private void saveCombosSheet()

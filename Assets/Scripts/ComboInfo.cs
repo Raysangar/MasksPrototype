@@ -25,6 +25,11 @@ using UnityEngine;
             get { return combosTimeRequirement; }
         }
 
+        public int CombosCount
+        {
+            get { return combos.Count; }
+        }
+
         public ComboInfo()
         {
             combos = new Dictionary<string, Combo>();
@@ -37,14 +42,24 @@ using UnityEngine;
             deserializeInfo(serializedInfo);
         }
 
+        public void removeCombo(string comboName)
+        {
+            combos.Remove(comboName);
+            combosAnimation.Remove(comboName);
+            combosTimeRequirement.Remove(comboName);
+        }
+
         private void deserializeInfo(string seriealizedInfo)
         {
-            foreach (string comboInfo in seriealizedInfo.Split('\n'))
+            foreach (string comboInfo in seriealizedInfo.Split('\n')) 
             {
-                string[] comboAttributes = comboInfo.Split(';');
-                combos.Add(comboAttributes[0], new Combo(comboAttributes[1]));
-                combosAnimation.Add(comboAttributes[0], comboAttributes[2]);
-                initTimeRequirements(comboAttributes[0], comboAttributes[3]);
+                if (comboInfo != "")
+                {
+                    string[] comboAttributes = comboInfo.Split(';');
+                    combos.Add(comboAttributes[0], new Combo(comboAttributes[1]));
+                    combosAnimation.Add(comboAttributes[0], comboAttributes[2]);
+                    initTimeRequirements(comboAttributes[0], comboAttributes[3]);
+                }
             }
         }
 
@@ -61,7 +76,7 @@ using UnityEngine;
             string serializedList = "";
             foreach (string comboName in combos.Keys)
                 serializedList += comboName + ";" + combos[comboName].ToString() + ";"
-                    + combosAnimation[comboName] + ";" + combosTimeRequirement[comboName].ToString();
+                    + combosAnimation[comboName] + ";" + combosTimeRequirement[comboName].ToString() + "\n";
             return serializedList;
         }
     }
