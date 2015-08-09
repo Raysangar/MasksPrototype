@@ -1,7 +1,6 @@
 ﻿
     public enum AttackType
     {
-        Square,
-        Circle,
-        Triangle
+        StrongAttack,
+        WeakAttack,
     }

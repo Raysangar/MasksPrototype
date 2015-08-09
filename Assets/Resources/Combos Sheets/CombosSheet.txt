@@ -1,4 +1,3 @@
-Combo 1;|Square;Jab;[0, 1]
-Combo 2;|Circle;Hikick;[0, 1]
-Combo 3;|Triangle;Spinkick;[0, 1]
-Combo 4;|Square|Circle;Rising_P;[0, 1]
+Weak;|WeakAttack;Jab;[0, 1]
+Strong;|StrongAttack;Hikick;[0, 1]
+Combo;|WeakAttack|StrongAttack;Spinkick;[0, 1]

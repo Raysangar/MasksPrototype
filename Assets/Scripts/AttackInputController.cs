@@ -10,13 +10,14 @@ public class AttackInputController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	    if (Input.GetKeyDown(KeyCode.Alpha1))
-            SendMessage("Attack", AttackType.Circle);
-	    
-	    if (Input.GetKeyDown(KeyCode.Alpha2))
-            SendMessage("Attack", AttackType.Square);
+        if (Input.GetButtonDown("WeakAttack"))
+        {
+            SendMessage("Attack", AttackType.WeakAttack);
+        }
 
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-            SendMessage("Attack", AttackType.Triangle);
+        if (Input.GetButtonDown("StrongAttack"))
+        {
+            SendMessage("Attack", AttackType.StrongAttack);
+        }
     }
 }

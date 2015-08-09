@@ -32,6 +32,7 @@ public class ComboEditorWindow : EditorWindow
         scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
         {
             animator = EditorGUILayout.ObjectField(animator, typeof(Animator), true) as Animator;
+
             if (animator != null)
             {
                 foreach (AnimatorControllerParameter parameter in animator.parameters)
@@ -96,7 +97,7 @@ public class ComboEditorWindow : EditorWindow
                     EditorGUILayout.EndHorizontal();
                 }
                 if (GUILayout.Button("Add"))
-                    combo.Add(AttackType.Square);
+                    combo.Add(AttackType.WeakAttack);
             }
             EditorGUILayout.EndVertical();
         }
@@ -122,7 +123,7 @@ public class ComboEditorWindow : EditorWindow
     {
         Combo combo = new Combo();
         string comboName = "Combo " + (comboInfo.Combos.Count + 1);
-        combo.Add(AttackType.Square);
+        combo.Add(AttackType.WeakAttack);
         comboInfo.Combos.Add(comboName, combo);
         comboInfo.CombosAnimation[comboName] = "";
         comboInfo.CombosTimeRequirement[comboName] = new KeyValuePair<float, float>(0, 0);
@@ -131,10 +132,10 @@ public class ComboEditorWindow : EditorWindow
 
     private void openCombosSheet()
     {
-        string path = EditorUtility.OpenFilePanel("Open Combos Sheet", "../../Resources/Combos Sheets", "txt");
+        string path = EditorUtility.OpenFilePanel("Open Combos Sheet", "Assets/Resources/Combos Sheets", "txt");
         if (path == "") return;
-        StreamReader reader = File.OpenText(path);
-        comboInfo = new ComboInfo(reader.ReadToEnd());
+        string serializedComboInfo = File.ReadAllText(path, System.Text.Encoding.UTF8);
+        comboInfo = new ComboInfo(serializedComboInfo);
         toggle.Clear();
         for (int i = 0; i < comboInfo.CombosCount; ++i)
             toggle.Add(false);
@@ -142,12 +143,9 @@ public class ComboEditorWindow : EditorWindow
 
     private void saveCombosSheet()
     {
-        string directory = EditorUtility.SaveFilePanel("Save Combos Sheet", "../../Resources/Combos Sheets", "CombosSheet", "txt");
+        string directory = EditorUtility.SaveFilePanel("Save Combos Sheet", "Assets/Resources/Combos Sheets", "CombosSheet", "txt");
         if (directory == "") return;
-        string combosSheet = comboInfo.serialize();
-        StreamWriter writer = File.CreateText(directory);
-        writer.Write(combosSheet.ToCharArray());
-        writer.Close();
+        File.WriteAllText(directory, comboInfo.serialize());
     }
 
     
