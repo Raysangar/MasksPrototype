@@ -16,5 +16,5 @@ public class HitDetection : MonoBehaviour {
 	void OnTriggerEnter(Collider other)
 	{
 		this.SendMessageUpwards ("ColliderHit", other);	
-		}
+	}
 }

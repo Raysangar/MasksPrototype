@@ -76,19 +76,7 @@ public class PlayerControllerIso : MonoBehaviour {
 		}
 	}
 
-	void ReceiveDamage(int damage)
-	{
-		currentLife -= damage;
-		hpBar.value = currentLife / totalLife;
-		if (currentLife <= 0) {
-			
-		}
-	}
-
-	void Dead()
-	{
-
-	}
+	
 
 
 

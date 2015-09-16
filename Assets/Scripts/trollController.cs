@@ -31,6 +31,10 @@ public class trollController : MonoBehaviour {
 			myRigidbody.velocity=speed*this.transform.forward;
 			myAnimator.SetBool("Move",true);
 		}
+        else {
+            myRigidbody.velocity = Vector3.zero;
+            myAnimator.SetBool("Move", false);
+        }
 
 	}
 	void PlayerDetected(Collider other)
