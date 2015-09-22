@@ -44,11 +44,8 @@ public class trollController : MonoBehaviour {
 
 	void ColliderHit(Collider other)
 	{
-		if (isAttacking) {
-
+		if (isAttacking)
 			other.SendMessage("ReceiveDamage",30);
-			Debug.Log ("Player Hit");
-		}
 	}
 
 	void Attack()

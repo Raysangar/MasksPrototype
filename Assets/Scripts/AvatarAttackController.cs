@@ -12,7 +12,7 @@ public class AvatarAttackController : MonoBehaviour {
         avatarAttacking = isAttacking;
     }
 
-    void ColliderHit(Collider other) {
+    void AttackColliderHit(Collider other) {
         if (avatarAttacking) {
             other.SendMessageUpwards("ReceiveDamage", 5);
         }

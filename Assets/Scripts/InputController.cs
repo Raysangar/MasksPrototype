@@ -23,13 +23,14 @@ public class InputController : MonoBehaviour {
         if (Input.GetButtonDown("WeakAttack"))
             SendMessage("Attack", AttackType.WeakAttack);
         else if (Input.GetButtonDown("MouseWeakAttack")) {
-            SendMessage("Attack", AttackType.WeakAttack);
+            AttackInfo attackInfo = new AttackInfo(AttackType.WeakAttack, getMouseTarget());
+            SendMessage("AttackTo", attackInfo);
         }
-
-        if (Input.GetButtonDown("StrongAttack"))
+        else if (Input.GetButtonDown("StrongAttack"))
             SendMessage("Attack", AttackType.StrongAttack);
         else if (Input.GetButtonDown("MouseStrongAttack")) {
-            SendMessage("Attack", AttackType.StrongAttack);
+            AttackInfo attackInfo = new AttackInfo(AttackType.StrongAttack, getMouseTarget());
+            SendMessage("AttackTo", attackInfo);
         }
     }
 
@@ -51,5 +52,13 @@ public class InputController : MonoBehaviour {
             SendMessage("SetMovement", movementInput);
             lastMovementInput = movementInput;
         }
+    }
+
+    private Vector3 getMouseTarget() {
+        RaycastHit hitInfo;
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out hitInfo, 1000))
+            return hitInfo.point;
+        return Vector3.zero;
     }
 }

@@ -1339,6 +1339,10 @@ Prefab:
       propertyPath: m_CollisionDetection
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 11464570, guid: c9c909f1b1154a84d9dfa9678efc6a3b, type: 2}
+      propertyPath: healthBar
+      value: 
+      objectReference: {fileID: 618067967}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: c9c909f1b1154a84d9dfa9678efc6a3b, type: 2}
   m_IsPrefabParent: 0

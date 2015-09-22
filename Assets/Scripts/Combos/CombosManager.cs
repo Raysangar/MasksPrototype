@@ -24,6 +24,13 @@ public class CombosManager : MonoBehaviour {
         characterAnimator.SetTrigger(animationTriggerName);
     }
 
+    void AttackTo(AttackInfo attackInfo) {
+        Vector3 target = attackInfo.Target;
+        target.y = transform.position.y;
+        transform.LookAt(target);
+        Attack(attackInfo.AttackType);
+    }
+
     private string selectAnimationAttack(AttackType attack)
     {
         currentSequence.Add(attack);

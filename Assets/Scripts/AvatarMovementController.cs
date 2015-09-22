@@ -47,7 +47,7 @@ public class AvatarMovementController : MonoBehaviour {
     }
 
     public void AvatarDash() {
-        AvatarDashToward(currentMovementDirection);
+        AvatarDashToward(transform.forward);
     }
 
     public void AvatarDashToward(Vector3 dashDirection) {
