@@ -8,7 +8,7 @@ using UnityEngine;
     {
         private Dictionary<string, Combo> combos;
         private Dictionary<string, string> combosAnimation;
-        private Dictionary<string, KeyValuePair<float, float>> combosTimeRequirement;
+        private Dictionary<string, TimeRange> combosTimeRequirement;
 
         public Dictionary<string, Combo> Combos
         {
@@ -20,7 +20,7 @@ using UnityEngine;
             get { return combosAnimation; }
         }
 
-        public Dictionary<string, KeyValuePair<float, float>> CombosTimeRequirement
+        public Dictionary<string, TimeRange> CombosTimeRequirement
         {
             get { return combosTimeRequirement; }
         }
@@ -34,7 +34,7 @@ using UnityEngine;
         {
             combos = new Dictionary<string, Combo>();
             combosAnimation = new Dictionary<string, string>();
-            combosTimeRequirement = new Dictionary<string, KeyValuePair<float, float>>();
+            combosTimeRequirement = new Dictionary<string, TimeRange>();
         }
 
         public ComboInfo(string serializedInfo) : this()
@@ -68,7 +68,7 @@ using UnityEngine;
             char[] separators = new char[4] {' ', ']', '[', ','};
             string[] stringTimeRequirements = serializadTimeRequirements.Split(separators);
             combosTimeRequirement.Add(comboName, 
-                new KeyValuePair<float, float>(float.Parse(stringTimeRequirements[1]), float.Parse(stringTimeRequirements[3])));
+                new TimeRange(float.Parse(stringTimeRequirements[1]), float.Parse(stringTimeRequirements[3])));
         }
 
         public string serialize()

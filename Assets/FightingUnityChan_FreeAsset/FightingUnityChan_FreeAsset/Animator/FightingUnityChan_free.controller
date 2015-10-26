@@ -81,6 +81,39 @@ AnimatorController:
     m_IKPass: 0
     m_SyncedLayerAffectsTiming: 0
     m_Controller: {fileID: 9100000}
+--- !u!114 &11402302
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b3f4673f282b5042be07c4f036fc6c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &11405542
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b3f4673f282b5042be07c4f036fc6c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &11430114
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b3f4673f282b5042be07c4f036fc6c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &11434598
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -117,6 +150,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   messageEventName: AvatarDashing
+--- !u!114 &11466004
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b3f4673f282b5042be07c4f036fc6c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &11471486
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b3f4673f282b5042be07c4f036fc6c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &11491108
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -691,6 +746,7 @@ AnimatorState:
   - {fileID: 110122976}
   m_StateMachineBehaviours:
   - {fileID: 11434598}
+  - {fileID: 11471486}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -762,7 +818,8 @@ AnimatorState:
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 110176860}
-  m_StateMachineBehaviours: []
+  m_StateMachineBehaviours:
+  - {fileID: 11405542}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -788,6 +845,7 @@ AnimatorState:
   - {fileID: 110126330}
   m_StateMachineBehaviours:
   - {fileID: 11438528}
+  - {fileID: 11466004}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -871,6 +929,7 @@ AnimatorState:
   - {fileID: 110105890}
   m_StateMachineBehaviours:
   - {fileID: 11450584}
+  - {fileID: 11430114}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -944,6 +1003,7 @@ AnimatorState:
   - {fileID: 110132102}
   m_StateMachineBehaviours:
   - {fileID: 11491108}
+  - {fileID: 11402302}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -981,7 +1041,7 @@ AnimatorStateMachine:
     m_Position: {x: 456, y: -120, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 110247686}
-    m_Position: {x: 144, y: -96, z: 0}
+    m_Position: {x: 216, y: -120, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 110266294}
     m_Position: {x: 84, y: 168, z: 0}

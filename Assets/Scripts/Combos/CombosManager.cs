@@ -6,6 +6,7 @@ public class CombosManager : MonoBehaviour {
     private Combo currentSequence;
     private float lastAttackTime;
     private ComboInfo comboInfo;
+    private int animationsTriggered;
 
 
     public TextAsset comboSheet;
@@ -15,13 +16,16 @@ public class CombosManager : MonoBehaviour {
 	void Start () {
         comboInfo = new ComboInfo(comboSheet.text);
         currentSequence = new Combo();
+        animationsTriggered = 0;
 	}
 	
     void Attack(AttackType attackType)
     {
         string animationTriggerName = selectAnimationAttack(attackType);
-        lastAttackTime = Time.time;
-        characterAnimator.SetTrigger(animationTriggerName);
+        if (!string.IsNullOrEmpty(animationTriggerName)) {
+            ++animationsTriggered;
+            characterAnimator.SetTrigger(animationTriggerName);
+        }
     }
 
     void AttackTo(AttackInfo attackInfo) {
@@ -34,17 +38,15 @@ public class CombosManager : MonoBehaviour {
     private string selectAnimationAttack(AttackType attack)
     {
         currentSequence.Add(attack);
-        if (comboInfo.Combos.ContainsValue(currentSequence))
-        {
-            string comboName = getComboName(currentSequence);
+        string comboName = getComboName(currentSequence);
+        if (!string.IsNullOrEmpty(comboName)) {
             float timeSinceLastAttack = Time.time - lastAttackTime;
-            KeyValuePair<float, float> comboTimeRequirement = comboInfo.CombosTimeRequirement[comboName];
-            if (timeSinceLastAttack >= comboTimeRequirement.Key && timeSinceLastAttack <= comboTimeRequirement.Value)
+            TimeRange comboTimeRequirement = comboInfo.CombosTimeRequirement[comboName];
+            if (comboTimeRequirement.isFalsey() || comboTimeRequirement.valueFitsInRange(timeSinceLastAttack))
                 return comboInfo.CombosAnimation[comboName];
         }
         currentSequence.Clear();
-        currentSequence.Add(attack);
-        return comboInfo.CombosAnimation[getComboName(currentSequence)];
+        return "";
     }
 
     private string getComboName(Combo combo)
@@ -53,5 +55,16 @@ public class CombosManager : MonoBehaviour {
             if (combo.Equals(comboInfo.Combos[comboName]))
                 return comboName;
         return "";
+    }
+
+    void AttackStarted() {
+        lastAttackTime = Time.time;
+    }
+
+    void AttackFinished() {
+        if (--animationsTriggered == 0) {
+            lastAttackTime = 0;
+            currentSequence.Clear();
+        }
     }
 }

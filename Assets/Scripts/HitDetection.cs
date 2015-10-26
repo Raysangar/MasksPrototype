@@ -15,7 +15,6 @@ public class HitDetection : MonoBehaviour {
 
 	void OnTriggerEnter(Collider other)
 	{
-        Debug.Log("adasdsa");
 		SendMessageUpwards("AttackColliderHit", other);	
 	}
 }

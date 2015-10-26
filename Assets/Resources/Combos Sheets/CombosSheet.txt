@@ -1,3 +1,4 @@
-Weak;|WeakAttack;Jab;[0, 1]
-Strong;|StrongAttack;Hikick;[0, 1]
-Combo;|WeakAttack|StrongAttack;Spinkick;[0, 1]
+Weak;|WeakAttack;Jab;[-1, -1]
+Combo 1;|WeakAttack|WeakAttack;Hikick;[0, 1]
+Combo 3;|WeakAttack|WeakAttack|WeakAttack;Spinkick;[0, 1]
+Strong;|StrongAttack;Headspring;[-1, -1]

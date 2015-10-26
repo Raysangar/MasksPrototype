@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEditor;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 
@@ -75,7 +74,7 @@ public class ComboEditorWindow : EditorWindow
             string comboAnimation = comboInfo.CombosAnimation[comboName];
             comboInfo.CombosAnimation.Remove(comboName);
             comboInfo.CombosAnimation.Add(newComboName, comboAnimation);
-            KeyValuePair<float, float> timeRequirements = comboInfo.CombosTimeRequirement[comboName];
+            TimeRange timeRequirements = comboInfo.CombosTimeRequirement[comboName];
             comboInfo.CombosTimeRequirement.Remove(comboName);
             comboInfo.CombosTimeRequirement.Add(newComboName, timeRequirements);
         }
@@ -101,10 +100,16 @@ public class ComboEditorWindow : EditorWindow
             }
             EditorGUILayout.EndVertical();
         }
- 
-        float minTime = EditorGUILayout.FloatField("Minimun Time Before Correct Combo", comboInfo.CombosTimeRequirement[newComboName].Key);
-        float maxTime = EditorGUILayout.FloatField("Minimun Time Untill Correct Combo", comboInfo.CombosTimeRequirement[newComboName].Value);
-        comboInfo.CombosTimeRequirement[newComboName] = new KeyValuePair<float, float>(minTime, maxTime);
+
+        if (combo.ComboSequence.Count > 1) {
+            if (comboInfo.CombosTimeRequirement[newComboName].isFalsey())
+                comboInfo.CombosTimeRequirement[newComboName] = new TimeRange(0, 0);
+
+            float minTime = EditorGUILayout.FloatField("Minimun Time For Correct Combo", comboInfo.CombosTimeRequirement[newComboName].MinTime);
+            float maxTime = EditorGUILayout.FloatField("Maximun Time For Correct Combo", comboInfo.CombosTimeRequirement[newComboName].MaxTime);
+            comboInfo.CombosTimeRequirement[newComboName] = new TimeRange(minTime, maxTime);
+        } else
+            comboInfo.CombosTimeRequirement[newComboName] = TimeRange.FalseyTimeRange();
 
         if (animationTriggers.Count == 0)
             comboInfo.CombosAnimation[newComboName] = EditorGUILayout.TextField("Animation To Execute", comboInfo.CombosAnimation[newComboName]);
@@ -126,7 +131,7 @@ public class ComboEditorWindow : EditorWindow
         combo.Add(AttackType.WeakAttack);
         comboInfo.Combos.Add(comboName, combo);
         comboInfo.CombosAnimation[comboName] = "";
-        comboInfo.CombosTimeRequirement[comboName] = new KeyValuePair<float, float>(0, 0);
+        comboInfo.CombosTimeRequirement[comboName] = null;
         toggle.Add(false);
     }
 
