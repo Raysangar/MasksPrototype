@@ -1,55 +1,51 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
+[RequireComponent(typeof(Animator))]
 public class CombosManager : MonoBehaviour {
+    [SerializeField]
+    private TextAsset comboSheet;
+
     private Combo currentSequence;
+    private string currentComboName;
     private float lastAttackTime;
     private ComboInfo comboInfo;
-    private int animationsTriggered;
-
-
-    public TextAsset comboSheet;
-    public Animator characterAnimator;
-
-	// Use this for initialization
+    
 	void Start () {
         comboInfo = new ComboInfo(comboSheet.text);
         currentSequence = new Combo();
-        animationsTriggered = 0;
+        currentComboName = "";
 	}
-	
-    void Attack(AttackType attackType)
-    {
-        string animationTriggerName = selectAnimationAttack(attackType);
-        if (!string.IsNullOrEmpty(animationTriggerName)) {
-            ++animationsTriggered;
-            characterAnimator.SetTrigger(animationTriggerName);
-        }
+
+    public void AddAttackToCurrentSequence(AttackType attackType) {
+        currentSequence.Add(attackType);
+        currentComboName = comboOf(currentSequence);
     }
 
-    void AttackTo(AttackInfo attackInfo) {
-        Vector3 target = attackInfo.Target;
-        target.y = transform.position.y;
-        transform.LookAt(target);
-        Attack(attackInfo.AttackType);
+    public void CancelCombo() {
+        ComboFinished();
     }
 
-    private string selectAnimationAttack(AttackType attack)
+    public bool IsComboAvailableForCurrentSequence() {
+        return (currentComboName != "" && comboCorrectlyExecuted());
+    }
+
+    public string GetAnimationForCurrentCombo()
     {
-        currentSequence.Add(attack);
-        string comboName = getComboName(currentSequence);
-        if (!string.IsNullOrEmpty(comboName)) {
-            float timeSinceLastAttack = Time.time - lastAttackTime;
-            TimeRange comboTimeRequirement = comboInfo.CombosTimeRequirement[comboName];
-            if (comboTimeRequirement.isFalsey() || comboTimeRequirement.valueFitsInRange(timeSinceLastAttack))
-                return comboInfo.CombosAnimation[comboName];
-        }
-        currentSequence.Clear();
+        if (currentComboName != "")
+            return comboInfo.CombosAnimation[currentComboName];
         return "";
     }
 
-    private string getComboName(Combo combo)
+    private bool comboCorrectlyExecuted() {
+        float timeSinceLastAttack = Time.time - lastAttackTime;
+        TimeRange comboTimeRequirement = comboInfo.CombosTimeRequirement[currentComboName];
+        return (comboTimeRequirement.isFalsey() || comboTimeRequirement.valueFitsInRange(timeSinceLastAttack));
+    }
+
+    private string comboOf(Combo combo)
     {
         foreach(string comboName in comboInfo.Combos.Keys)
             if (combo.Equals(comboInfo.Combos[comboName]))
@@ -57,14 +53,12 @@ public class CombosManager : MonoBehaviour {
         return "";
     }
 
-    void AttackStarted() {
-        lastAttackTime = Time.time;
+    public void ComboFinished() {
+        currentSequence.Clear();
+        currentComboName = "";
     }
 
-    void AttackFinished() {
-        if (--animationsTriggered == 0) {
-            lastAttackTime = 0;
-            currentSequence.Clear();
-        }
+    void OnAttackStarted() {
+        lastAttackTime = Time.time;
     }
 }
