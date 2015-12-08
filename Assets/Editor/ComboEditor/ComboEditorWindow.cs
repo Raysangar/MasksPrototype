@@ -10,8 +10,9 @@ public class ComboEditorWindow : EditorWindow
     private List<string> animationTriggers = new List<string>();
     private List<bool> toggle = new List<bool>();
     private Vector2 scrollPosition = new Vector2(0, 0);
+    private GameObject lastSelection;
 
-    [MenuItem("Window/Combo Editor")]
+    [MenuItem("Tibi Games/Combo Editor")]
     public static void ShowWindow()
     {
         EditorWindow window = EditorWindow.GetWindow(typeof(ComboEditorWindow));
@@ -30,10 +31,16 @@ public class ComboEditorWindow : EditorWindow
     {
         scrollPosition = EditorGUILayout.BeginScrollView(scrollPosition);
         {
+            if (Selection.activeGameObject != null && Selection.activeGameObject != lastSelection) {
+                lastSelection = Selection.activeGameObject;
+                CombosManager selectedCombosManager = lastSelection.GetComponent<CombosManager>();
+                if (selectedCombosManager != null)
+                    initComboInfoWith(selectedCombosManager.ComboSheet);
+                animator = lastSelection.GetComponent<Animator>();
+            }
             animator = EditorGUILayout.ObjectField(animator, typeof(Animator), true) as Animator;
-
-            if (animator != null)
-            {
+            
+            if (animator != null) {
                 foreach (AnimatorControllerParameter parameter in animator.parameters)
                     if (parameter.type == AnimatorControllerParameterType.Trigger)
                         animationTriggers.Add(parameter.name);
@@ -42,8 +49,7 @@ public class ComboEditorWindow : EditorWindow
             EditorGUILayout.Separator();
             int editorPosition = 0;
             List<string> keys = new List<string>(comboInfo.Combos.Keys);
-            foreach (string comboName in keys)
-            {
+            foreach (string comboName in keys) {
                 EditorGUILayout.BeginHorizontal();
                 addComboForm(comboName, editorPosition++);
                 EditorGUILayout.EndHorizontal();
@@ -138,12 +144,15 @@ public class ComboEditorWindow : EditorWindow
     private void openCombosSheet()
     {
         string path = EditorUtility.OpenFilePanel("Open Combos Sheet", "Assets/Resources/Combos Sheets", "txt");
-        if (path == "") return;
-        string serializedComboInfo = File.ReadAllText(path, System.Text.Encoding.UTF8);
+        if (path != "") {
+            initComboInfoWith(File.ReadAllText(path, System.Text.Encoding.UTF8));
+        }
+    }
+
+    private void initComboInfoWith(string serializedComboInfo) {
         comboInfo = new ComboInfo(serializedComboInfo);
         toggle.Clear();
-        for (int i = 0; i < comboInfo.CombosCount; ++i)
-            toggle.Add(false);
+        toggle.AddRange(new bool[comboInfo.CombosCount]);
     }
 
     private void saveCombosSheet()

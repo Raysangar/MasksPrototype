@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[RequireComponent(typeof(CombosManager))]
+[RequireComponent(typeof(CombosManager), typeof(Animator))]
 public class AttackController : MonoBehaviour {
     private Animator characterAnimator;
     private CombosManager combosManager;

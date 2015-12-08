@@ -12,12 +12,14 @@ public class CombosManager : MonoBehaviour {
     private string currentComboName;
     private float lastAttackTime;
     private ComboInfo comboInfo;
-    
-	void Start () {
-        comboInfo = new ComboInfo(comboSheet.text);
-        currentSequence = new Combo();
-        currentComboName = "";
-	}
+
+    public String ComboSheet {
+        get {
+            if (comboSheet != null)
+                return comboSheet.text;
+            return "";
+        }
+    }
 
     public void AddAttackToCurrentSequence(AttackType attackType) {
         currentSequence.Add(attackType);
@@ -37,6 +39,12 @@ public class CombosManager : MonoBehaviour {
         if (currentComboName != "")
             return comboInfo.CombosAnimation[currentComboName];
         return "";
+    }
+
+    void Start() {
+        comboInfo = new ComboInfo(comboSheet.text);
+        currentSequence = new Combo();
+        currentComboName = "";
     }
 
     private bool comboCorrectlyExecuted() {
